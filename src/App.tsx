@@ -22,7 +22,7 @@ function App() {
 	      <Grid xs={6} sm={4} md={6} lg={2}>5</Grid>
 	      <Grid xs={6} sm={4} md={6} lg={2}>6</Grid>
 		  <Grid xs={6} md={4} lg={2}>
-		  <Indicator title='Precipitación' subtitle='Probabilidad' value={0.13} />
+		  <Indicator title={'Precipitación'} subtitle={'Probabilidad'} value={0.13} />
 	    	</Grid>
 		  
 			
