@@ -1,0 +1,13 @@
+body{
+    background-color: lightblue;
+}
+h1{
+    color: white;
+}
+#seccion1{
+    border: solid;
+}
+
+#seccion2{
+    border: outset;
+}
