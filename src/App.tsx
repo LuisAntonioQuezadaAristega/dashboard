@@ -84,17 +84,18 @@ function App() {
 		*/}
 
 		let location = xml.getElementsByTagName("location")[1]
+		let city = (xml.getElementsByTagName("name"))[0]
 
 		let geobaseid = location.getAttribute("geobaseid")
-		dataToIndicators.push(["Location","geobaseid", geobaseid])
+		dataToIndicators.push([city.textContent,"geobaseid", geobaseid])
 
 		let latitude = location.getAttribute("latitude")
-		dataToIndicators.push(["Location","Latitude", latitude])
+		dataToIndicators.push([city.textContent,"Latitude", latitude])
 
 		let longitude = location.getAttribute("longitude")
-		dataToIndicators.push(["Location","Longitude", longitude])
+		dataToIndicators.push([city.textContent,"Longitude", longitude])
 
-		console.log( dataToIndicators )
+		//console.log(  )
 
 		{/* Renderice el arreglo de resultados en un arreglo de elementos Indicator */}
 
