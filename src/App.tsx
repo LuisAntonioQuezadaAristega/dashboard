@@ -3,12 +3,13 @@ import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import Indicator from './components/Indicator';
 import Summary from './components/Summary';
 import BasicTable from './components/BasicTable';
-import WeatherChart from './components/WeatherChart';
+//import WeatherChart from './components/WeatherChart';
 import ControlPanel from './components/ControlPanel';
 import TemperatureChart from './components/TemperatureChart';
 //import reactLogo from './assets/react.svg'
 //import viteLogo from '/vite.svg'
 import './App.css'
+import PrecipitationChart from './components/PrecipitationChart';
 
 //<Grid xs={12} sm={4} md={3} lg={2}>1</Grid>
 //<Grid xs={6} sm={4} md={3} lg={2}>2</Grid>
@@ -31,12 +32,12 @@ function App() {
 
   let [rowsTable, setRowsTable] = useState([])
 
-  {/*variables max y min de velocidad*/}
+  {/*max y min de velocidad*/}
   let [rowsSpeed, setRowsSpeed] = useState([])
 
-  {/*variables cuadro*/}
+  {/*max y min de temperatura*/}
   let [rowsHeat, setRowsHeat] = useState([])
-  
+
   {/* Hook: useEffect */}
 	
   useEffect(()=>{
@@ -60,7 +61,7 @@ function App() {
 
 			{/* Request */}
 
-			let API_KEY = ""//"1835b23e7d0c0a071ef3586f8db8f8c5"
+			let API_KEY = ""
 			let response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=Guayaquil&mode=xml&appid=${API_KEY}`)
 			let savedTextXML = await response.text();
 
@@ -121,65 +122,72 @@ function App() {
 
         let arrayObjects = Array.from( xml.getElementsByTagName("time") ).map( (timeElement) =>  {
 				
-			let hoursFrom = timeElement.getAttribute("from").split("T")[1]
+			let hoursFrom = (""+timeElement.getAttribute("from")).split("T")[1]
 
-			let hoursTo = timeElement.getAttribute("to").split("T")[1]
+			let hoursTo = (""+timeElement.getAttribute("to")).split("T")[1]
 
 			let windSpeed = timeElement.getElementsByTagName("windSpeed")[0].getAttribute("mps") + " "+  timeElement.getElementsByTagName("windSpeed")[0].getAttribute("unit")
 
 			let windDirection = timeElement.getElementsByTagName("windDirection")[0].getAttribute("deg") + " "+  timeElement.getElementsByTagName("windDirection")[0].getAttribute("code") 
 
-			let temperature = timeElement.getElementsByTagName("temperature")[0].getAttribute("value")
+			let maxtemp = Math.round((parseFloat(""+timeElement.getElementsByTagName("temperature")[0].getAttribute("max")) - 273.15) * 100)/100
 
-			return { "hoursFrom": hoursFrom, "hoursTo": hoursTo, "windSpeed": windSpeed, "windDirection": windDirection, "temperature": temperature}
+			let mintemp = Math.round((parseFloat(""+timeElement.getElementsByTagName("temperature")[0].getAttribute("min")) - 273.15) * 100)/100
+
+			let temperature = ((maxtemp + mintemp)/2)
+
+			let hoursprom = ( ((parseInt(hoursFrom.split(":")[0]) + parseInt(hoursTo.split(":")[0]))/2) - 0.5)+":30"
+
+			let llueve = parseFloat(""+timeElement.getElementsByTagName("precipitation")[0].getAttribute("probability")) * 100
+
+			return { "hoursFrom": hoursFrom, "hoursTo": hoursTo, "windSpeed": windSpeed, "windDirection": windDirection, "temperature": temperature, "maxtemp": maxtemp, "mintemp": mintemp, "hoursprom": hoursprom, "llueve": llueve}
 		   
 		})
 
 		arrayObjects = arrayObjects.slice(0,8)
 
-		let maxspeed = " "
+		let maxspeed = "0.0"
   		let maxspeedtime = ""
-  		let minspeed = " "
+  		let minspeed = "1000.0"
   		let minspeedtime = ""
 
-		let maxheat = " "
+		let maxheat = "0.0"
 		let maxheatTime = ""
-		let minheat = " "
+		let minheat = "1000.0"
 		let minheattime = ""
 		for(const index in arrayObjects){
-			if(maxspeed == " " || parseFloat(maxspeed.split(" ")[0])<parseFloat(arrayObjects[index]["windSpeed"].split(" ")[0])){
+			if(parseFloat(maxspeed.split(" ")[0])<parseFloat(arrayObjects[index]["windSpeed"].split(" ")[0])){
 				maxspeed = arrayObjects[index]["windSpeed"]
 				maxspeedtime = arrayObjects[index]["hoursFrom"] + " - " + arrayObjects[index]["hoursTo"]
 			}
 
-			if(minspeed == " " || parseFloat(minspeed.split(" ")[0])>parseFloat(arrayObjects[index]["windSpeed"].split(" ")[0])){
+			if(parseFloat(minspeed.split(" ")[0])>parseFloat(arrayObjects[index]["windSpeed"].split(" ")[0])){
 				minspeed = arrayObjects[index]["windSpeed"]
 				minspeedtime = arrayObjects[index]["hoursFrom"] + " - " + arrayObjects[index]["hoursTo"]
 			}
 
-			if(maxheat == " " || parseFloat(maxheat)<parseFloat(arrayObjects[index]["temperature"])){
-				maxheat = arrayObjects[index]["temperature"]
+			if(parseFloat(maxheat) < arrayObjects[index]["maxtemp"]){
+				maxheat = ""+arrayObjects[index]["maxtemp"]
 				maxheatTime = arrayObjects[index]["hoursFrom"] + " - " + arrayObjects[index]["hoursTo"]
 			}
 
-			if(minheat == " " || parseFloat(minheat)>parseFloat(arrayObjects[index]["temperature"])){
-				minheat = arrayObjects[index]["temperature"]
+			if(parseFloat(minheat) > arrayObjects[index]["mintemp"]){
+				minheat = ""+arrayObjects[index]["mintemp"]
 				minheattime = arrayObjects[index]["hoursFrom"] + " - " + arrayObjects[index]["hoursTo"]
 			}
 		}
-	   
+
+		let lluvia = arrayObjects[0]["llueve"]
 		{/* 3. Actualice de la variable de estado mediante la función de actualización */}
 
 		setRowsTable(arrayObjects)
 		setRowsSpeed({ "max": maxspeed, "maxtime": maxspeedtime, "min": minspeed, "mintime": minspeedtime})
-		setRowsHeat({ "max": maxheat+" Kelvin", "maxtime": maxheatTime, "min": minheat+" Kelvin", "mintime": minheattime})
+		setRowsHeat({ "max": maxheat+" Celcius", "maxtime": maxheatTime, "min": minheat+" Celcius", "mintime": minheattime, "lluvia": lluvia})
 
 	})()
 
 
 },[])
-
-
 
   return (
 	
@@ -230,15 +238,15 @@ function App() {
 			<Grid >
 		  		<Indicator title={'Precipitación'} subtitle={'Probabilidad'} value={0.13} />
 				<br></br>
-				<ControlPanel title={'Temperatura'} max={rowsHeat["max"]} maxtime={rowsHeat["maxtime"]} min={rowsHeat["min"]} mintime={rowsHeat["mintime"]}/>
+				<ControlPanel title={'Temperatura (Celcius)'} max={rowsHeat["max"]} maxtime={rowsHeat["maxtime"]} min={rowsHeat["min"]} mintime={rowsHeat["mintime"]}/>
 	    	</Grid>
 
 			<Grid xs={12} lg={10}>
-				<TemperatureChart></TemperatureChart>
+				<TemperatureChart rows={rowsTable}></TemperatureChart>
 			</Grid>
 
 			<Grid xs={12} lg={10}>
-				<WeatherChart></WeatherChart>
+				<PrecipitationChart si={rowsHeat["lluvia"]}></PrecipitationChart>
 			</Grid>
 		</Grid>
 	</Grid>

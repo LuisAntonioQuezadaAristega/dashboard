@@ -1,9 +1,14 @@
 //import React from "react";
 import { Chart } from "react-google-charts";
+import { useState, useEffect } from 'react';
 
-export const data = [
+interface Config {
+  rows: Array<object>;
+}
+
+export var info = [
   [
-    { type: "number", label: "x" },
+    { type: "string", label: "x" },
     { type: "number", label: "valor" },
     { id: "i0", type: "number", role: "interval" },
     { id: "i1", type: "number", role: "interval" },
@@ -19,10 +24,11 @@ export const data = [
 ];
 
 export const options = {
-  title: "Temperatura (Kelvin) por hora",
+  title: "Temperatura (Celcius) por hora",
   curveType: "function",
   lineWidth: 4,
-  intervals: { style: "line" },
+  intervals: { style: "line"},
+  colors: ['#e0440e'],
   legend: "none",
   hAxis: {
     title: "Tiempo",
@@ -32,13 +38,32 @@ export const options = {
   }
 };
 
-export default function TemperatureChart() {
+export default function TemperatureChart(data:Config) {
+  let [rows, setRows] = useState([])
+
+  useEffect( () => {
+
+    (()=> {
+
+        setRows(data.rows)
+
+    })()
+
+  }, [data] )
+
+  let index = 1
+
+  rows.map((row) => {
+    info[index] = [row.hoursprom, row.temperature, row.maxtemp, row.mintemp]
+    index += 1
+  })
+
   return (
     <Chart
       chartType="LineChart"
       width="115%"
       height="400px"
-      data={data}
+      data={info}
       options={options}
     />
   );
