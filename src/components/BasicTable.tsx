@@ -79,23 +79,30 @@ export default function BasicTable(data:Config){
 
 return (
   <TableContainer component={Paper}>
-    <Table sx={{ minWidth: 600 }} aria-label="simple table">
+    <Table sx={{ minWidth: 450 }} aria-label="simple table">
       <TableHead>
         <TableRow>
-          <TableCell>Tiempo</TableCell>
-          <TableCell align="right">windDirection</TableCell>
+          <TableCell align="center">Tiempo</TableCell>
+          <TableCell align="center">Velocidad</TableCell>
+          <TableCell align="center">Dirección</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
         {rows.map((row) => (
           <TableRow
-            key={row.rangeHours}
+            key={row.hoursFrom}
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
           >
-            <TableCell component="th" scope="row">
-            {row.rangeHours}
+            <TableCell component="th" scope="row" align="center">
+              {row.hoursFrom}<br></br>
+              {row.hoursTo}
             </TableCell>
-            <TableCell align="right">{row.windDirection}</TableCell>
+            <TableCell align="center">
+              {row.windSpeed}
+            </TableCell>
+            <TableCell align="center">
+              {row.windDirection}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
