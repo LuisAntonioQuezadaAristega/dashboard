@@ -62,7 +62,7 @@ export default function TemperatureChart(data:Config) {
     <Chart
       chartType="LineChart"
       width="115%"
-      height="400px"
+      height="350px"
       data={info}
       options={options}
     />

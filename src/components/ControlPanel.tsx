@@ -20,8 +20,8 @@ export default function ControlPanel(config: Config) {
 	{/* Datos de los elementos del Select */}
 
 	let items = [
-		{"valor":"Valor máxima", "description":"El valor máxima es:", "dato":config.max, "tiempo":config.maxtime}, 
-		{"valor": "Valor minima", "description":"El valor minima es:", "dato":config.min, "tiempo":config.mintime}
+		{"valor":"Valor máxima", "dato":config.max, "tiempo":config.maxtime}, 
+		{"valor": "Valor minima", "dato":config.min, "tiempo":config.mintime}
 	]
 
 	let options = items.map( (item, key) => <MenuItem key={key} value={key}>{item["valor"]}</MenuItem>)
@@ -32,7 +32,6 @@ export default function ControlPanel(config: Config) {
 
 	{/* Variable de referencia a un elemento */ }
 
-    const descriptionRef = useRef<HTMLDivElement>(null);
 	const dato = useRef<HTMLDivElement>(null);
 	const descriptiontime = useRef<HTMLDivElement>(null);
 	const tiempo = useRef<HTMLDivElement>(null);
@@ -46,8 +45,7 @@ export default function ControlPanel(config: Config) {
 
 		{/* Modificación de la referencia */}
 
-		if (descriptionRef.current && dato.current && descriptiontime.current && tiempo.current) {
-			descriptionRef.current.innerHTML = (idx >= 0) ? items[idx]["description"] : ""
+		if (dato.current && descriptiontime.current && tiempo.current) {
 			dato.current.innerHTML = (idx >= 0) ? ""+items[idx]["dato"] : ""
 			descriptiontime.current.innerHTML = (idx >= 0) ? "Y ocurre entre las:" : ""
 			tiempo.current.innerHTML = (idx >= 0) ? ""+items[idx]["tiempo"] : ""
@@ -88,7 +86,6 @@ export default function ControlPanel(config: Config) {
 					</FormControl>
 
 					{/* Muestra la descripción de la variable seleccionada */}
-					<Typography ref={descriptionRef} mt={2} component="p" color="text.secondary" />
 					<Typography ref={dato} mt={2} component="p" color="text.secondary" />
 					<Typography ref={descriptiontime} mt={2} component="p" color="text.secondary" />
 					<Typography ref={tiempo} mt={2} component="p" color="text.secondary" />

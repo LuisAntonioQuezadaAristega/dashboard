@@ -10,6 +10,7 @@ import TemperatureChart from './components/TemperatureChart';
 //import viteLogo from '/vite.svg'
 import './App.css'
 import PrecipitationChart from './components/PrecipitationChart';
+import Gauge from './components/gauge';
 
 //<Grid xs={12} sm={4} md={3} lg={2}>1</Grid>
 //<Grid xs={6} sm={4} md={3} lg={2}>2</Grid>
@@ -25,6 +26,8 @@ function App() {
   {/* Variable de estado y función de actualización */}
 
   let [indicators, setIndicators] = useState([])
+
+  let [raindata, setRainData] = useState([])
 
   {/* 
     1. Agregue la variable de estado (dataTable) y función de actualización (setDataTable).
@@ -86,6 +89,8 @@ function App() {
 
 		let dataToIndicators = new Array()
 
+		let dataRain = new Array()
+
 		{/* 
 		Análisis, extracción y almacenamiento del contenido del XML 
 		en el arreglo de resultados
@@ -103,17 +108,28 @@ function App() {
 		let longitude = location.getAttribute("longitude")
 		dataToIndicators.push([city.textContent,"Longitude", longitude])
 
-		//console.log(  )
+		let forecast = xml.getElementsByTagName("precipitation")[0]
+		let rain = parseFloat(""+forecast.getAttribute("probability"))*100
+		let tiempo = xml.getElementsByTagName("time")[0]
+		let raintime = (""+tiempo.getAttribute("from")).split("T")[1] + " - " + (""+tiempo.getAttribute("to")).split("T")[1]
+		dataRain.push([rain, raintime])
+
+		//console.log(rain)
 
 		{/* Renderice el arreglo de resultados en un arreglo de elementos Indicator */}
 
 		let indicatorsElements = Array.from(dataToIndicators).map(
 			(element) => <Indicator title={element[0]} subtitle={element[1]} value={element[2]} />
 		)
+
+		let rainElements = Array.from(dataRain).map(
+			(element) => <PrecipitationChart si={element[0]} title={element[1]}/>
+		)
 		   
 		{/* Modificación de la variable de estado mediante la función de actualización */}
 
 		setIndicators(indicatorsElements)
+		setRainData(rainElements)
 
 		{/* 
              2. Procese los resultados de acuerdo con el diseño anterior.
@@ -138,9 +154,7 @@ function App() {
 
 			let hoursprom = ( ((parseInt(hoursFrom.split(":")[0]) + parseInt(hoursTo.split(":")[0]))/2) - 0.5)+":30"
 
-			let llueve = parseFloat(""+timeElement.getElementsByTagName("precipitation")[0].getAttribute("probability")) * 100
-
-			return { "hoursFrom": hoursFrom, "hoursTo": hoursTo, "windSpeed": windSpeed, "windDirection": windDirection, "temperature": temperature, "maxtemp": maxtemp, "mintemp": mintemp, "hoursprom": hoursprom, "llueve": llueve}
+			return { "hoursFrom": hoursFrom, "hoursTo": hoursTo, "windSpeed": windSpeed, "windDirection": windDirection, "temperature": temperature, "maxtemp": maxtemp, "mintemp": mintemp, "hoursprom": hoursprom}
 		   
 		})
 
@@ -176,13 +190,11 @@ function App() {
 				minheattime = arrayObjects[index]["hoursFrom"] + " - " + arrayObjects[index]["hoursTo"]
 			}
 		}
-
-		let lluvia = arrayObjects[0]["llueve"]
 		{/* 3. Actualice de la variable de estado mediante la función de actualización */}
 
 		setRowsTable(arrayObjects)
 		setRowsSpeed({ "max": maxspeed, "maxtime": maxspeedtime, "min": minspeed, "mintime": minspeedtime})
-		setRowsHeat({ "max": maxheat+" Celcius", "maxtime": maxheatTime, "min": minheat+" Celcius", "mintime": minheattime, "lluvia": lluvia})
+		setRowsHeat({ "max": maxheat+" Celcius", "maxtime": maxheatTime, "min": minheat+" Celcius", "mintime": minheattime})
 
 	})()
 
@@ -192,40 +204,47 @@ function App() {
   return (
 	
 	<Grid>
-		<Grid container spacing={5} id="seccion1">
-			<Grid container>
-	      		<Summary></Summary>
-				{indicators[0]}
-	      		<Summary></Summary>
-			</Grid>
-
-			<Grid container>
+		<Grid>
+			<h2>Guayaquil</h2>
+			<Grid container spacing={5}>
 				<Grid xs={6} lg={2}>
 					{indicators[0]}
-				{/* <Indicator title='Precipitación' subtitle='Probabilidad' value={0.13} /> */}
+					{/* <Indicator title='Precipitación' subtitle='Probabilidad' value={0.13} /> */}
 				</Grid>
 				<Grid xs={6} lg={2}>
 					{indicators[1]}
-				{/* <Indicator title='Precipitación' subtitle='Probabilidad' value={0.13} /> */}
+					{/* <Indicator title='Precipitación' subtitle='Probabilidad' value={0.13} /> */}
 				</Grid>
 				<Grid xs={6} lg={2}>
 					{indicators[2]}
-				{/* <Indicator title='Precipitación' subtitle='Probabilidad' value={0.13} /> */}
+					{/* <Indicator title='Precipitación' subtitle='Probabilidad' value={0.13} /> */}
 				</Grid>
 			</Grid>
 		</Grid>
+
+		{/*
+		<Grid container spacing={5}>
+	      	<Summary></Summary>
+			{indicators[0]}
+	      	<Summary></Summary>
+		</Grid>*/}
+
+		
 		<br></br>
 		<br></br>
 		<br></br>
 		<Grid container spacing={5} id="seccion1">
 			<Grid>
-		  		<Indicator title={'Precipitación'} subtitle={'Probabilidad'} value={0.13} />
-				<br></br>
 				<ControlPanel title={'Velocidad del viento'} max={rowsSpeed["max"]} maxtime={rowsSpeed["maxtime"]} min={rowsSpeed["min"]} mintime={rowsSpeed["mintime"]}/>
 	    	</Grid>
 			<Grid xs={12} lg={8}>
             {/* 4. Envíe la variable de estado (dataTable) como prop (input) del componente (BasicTable) */}
-            	<BasicTable rows={rowsTable}></BasicTable>
+				<h2>Tabla 1</h2>
+            	<BasicTable rows={rowsTable.slice(0,4)}></BasicTable>
+        	</Grid>
+			<Grid xs={12} lg={8}>
+				<h2>Tabla 2</h2>
+				<BasicTable rows={rowsTable.slice(4,8)}></BasicTable>
         	</Grid>
 			{/*<Grid xs={12} md={6} lg={9} >
 		       	<BasicTable />
@@ -236,8 +255,6 @@ function App() {
 		<br></br>
 		<Grid container spacing={5} id="seccion2">
 			<Grid >
-		  		<Indicator title={'Precipitación'} subtitle={'Probabilidad'} value={0.13} />
-				<br></br>
 				<ControlPanel title={'Temperatura (Celcius)'} max={rowsHeat["max"]} maxtime={rowsHeat["maxtime"]} min={rowsHeat["min"]} mintime={rowsHeat["mintime"]}/>
 	    	</Grid>
 
@@ -245,10 +262,9 @@ function App() {
 				<TemperatureChart rows={rowsTable}></TemperatureChart>
 			</Grid>
 
-			<Grid xs={12} lg={10}>
-				<PrecipitationChart si={rowsHeat["lluvia"]}></PrecipitationChart>
-			</Grid>
+			{raindata[0]}
 		</Grid>
+		<Gauge title={"windGust"} value={5.13}></Gauge>
 	</Grid>
 
 		
