@@ -10,6 +10,7 @@ import TemperatureChart from './components/TemperatureChart';
 //import viteLogo from '/vite.svg'
 import './App.css'
 import PrecipitationChart from './components/PrecipitationChart';
+import InteractiveSection from './components/InteractiveSection';
 import Gauge from './components/gauge';
 
 //<Grid xs={12} sm={4} md={3} lg={2}>1</Grid>
@@ -64,7 +65,7 @@ function App() {
 
 			{/* Request */}
 
-			let API_KEY = ""
+			let API_KEY = ""//1835b23e7d0c0a071ef3586f8db8f8c5"
 			let response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=Guayaquil&mode=xml&appid=${API_KEY}`)
 			let savedTextXML = await response.text();
 
@@ -89,6 +90,8 @@ function App() {
 
 		let dataToIndicators = new Array()
 
+		//let dataToSummary = new Array()
+
 		let dataRain = new Array()
 
 		{/* 
@@ -97,16 +100,18 @@ function App() {
 		*/}
 
 		let location = xml.getElementsByTagName("location")[1]
+		
 		let city = (xml.getElementsByTagName("name"))[0]
+		dataToIndicators.push(["País, ciudad:", "Ecuador, "+city.textContent])
 
-		let geobaseid = location.getAttribute("geobaseid")
-		dataToIndicators.push([city.textContent,"geobaseid", geobaseid])
+		let timezone = (xml.getElementsByTagName("timezone"))[0]
+		dataToIndicators.push(["Zona horaria:", timezone.textContent])
 
 		let latitude = location.getAttribute("latitude")
-		dataToIndicators.push([city.textContent,"Latitude", latitude])
+		dataToIndicators.push(["Latitud:", latitude])
 
 		let longitude = location.getAttribute("longitude")
-		dataToIndicators.push([city.textContent,"Longitude", longitude])
+		dataToIndicators.push(["Longitud:", longitude])
 
 		let forecast = xml.getElementsByTagName("precipitation")[0]
 		let rain = parseFloat(""+forecast.getAttribute("probability"))*100
@@ -119,7 +124,7 @@ function App() {
 		{/* Renderice el arreglo de resultados en un arreglo de elementos Indicator */}
 
 		let indicatorsElements = Array.from(dataToIndicators).map(
-			(element) => <Indicator title={element[0]} subtitle={element[1]} value={element[2]} />
+			(element) => <Indicator title={element[0]} value={element[1]}/>
 		)
 
 		let rainElements = Array.from(dataRain).map(
@@ -204,21 +209,22 @@ function App() {
   return (
 	
 	<Grid>
-		<Grid>
-			<h2>Guayaquil</h2>
-			<Grid container spacing={5}>
-				<Grid xs={6} lg={2}>
-					{indicators[0]}
-					{/* <Indicator title='Precipitación' subtitle='Probabilidad' value={0.13} /> */}
-				</Grid>
-				<Grid xs={6} lg={2}>
-					{indicators[1]}
-					{/* <Indicator title='Precipitación' subtitle='Probabilidad' value={0.13} /> */}
-				</Grid>
-				<Grid xs={6} lg={2}>
-					{indicators[2]}
-					{/* <Indicator title='Precipitación' subtitle='Probabilidad' value={0.13} /> */}
-				</Grid>
+		<Grid container spacing={5}>
+			<Grid>
+				{indicators[0]}
+				<br></br>
+				{indicators[1]}
+			</Grid>
+			<Grid>
+				{indicators[2]}
+				<br></br>
+				{indicators[3]}
+			</Grid>
+			<Grid>
+				<Summary></Summary>
+			</Grid>
+			<Grid>
+				<Gauge title={"humedad %"} value={50}></Gauge>
 			</Grid>
 		</Grid>
 
@@ -264,7 +270,6 @@ function App() {
 
 			{raindata[0]}
 		</Grid>
-		<Gauge title={"windGust"} value={5.13}></Gauge>
 	</Grid>
 
 		

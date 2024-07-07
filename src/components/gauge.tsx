@@ -8,7 +8,7 @@ interface Config {
 
 export const options = {
   width: 400,
-  height: 120,
+  height: 200,
   redFrom: 90,
   redTo: 100,
   yellowFrom: 75,
@@ -39,7 +39,7 @@ export default function Gauge(config: Config) {
     <Chart
       chartType="Gauge"
       width="100%"
-      height="400px"
+      height="80px"
       data={data}
       options={options}
     />
