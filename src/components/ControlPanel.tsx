@@ -42,15 +42,15 @@ export default function ControlPanel(config: Config) {
 
 	const handleChange = (event: SelectChangeEvent) => {
 
-		let idx = parseInt(event.target.value)
-		setSelected( idx );
+		selected = parseInt(event.target.value)
+		setSelected( selected );
 
 		{/* Modificación de la referencia */}
 
 		if (dato.current && descriptiontime.current && tiempo.current) {
-			dato.current.innerHTML = (idx >= 0) ? ""+items[idx]["dato"] : ""
-			descriptiontime.current.innerHTML = (idx >= 0) ? "Y ocurre entre las:" : ""
-			tiempo.current.innerHTML = (idx >= 0) ? ""+items[idx]["tiempo"] : ""
+			dato.current.innerHTML = (selected >= 0) ? ""+items[selected]["dato"] : ""
+			descriptiontime.current.innerHTML = (selected >= 0) ? "Y ocurre entre las:" : ""
+			tiempo.current.innerHTML = (selected >= 0) ? ""+items[selected]["tiempo"] : ""
 		}
 
 	};
@@ -63,7 +63,7 @@ export default function ControlPanel(config: Config) {
 					p: 2,
 					display: 'flex',
 					flexDirection: 'column',
-					backgroundColor: config.fondo,
+					backgroundColor: ""+config.fondo,
 				}}>
 
 				<Typography gutterBottom component="h2" variant="h6" color={""+config.color}>

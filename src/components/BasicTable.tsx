@@ -65,7 +65,8 @@ export default function BasicTable() {
 }
 */
 export default function BasicTable(data:Config){
-  let [rows, setRows] = useState([])
+  let ArrayAny : any[] = [];
+  let [rows, setRows] = useState(ArrayAny)
   useEffect( () => {
 
     (()=> {

@@ -24,26 +24,27 @@ function App() {
   //const [count, setCount] = useState(0)
 
   {/* Variable de estado y función de actualización */}
+  let ArrayAny : any[] = [];
 
-  let [indicators, setIndicators] = useState([])
+  let [indicators, setIndicators] = useState(ArrayAny)
 
-  let [raindata, setRainData] = useState([])
+  let [raindata, setRainData] = useState(ArrayAny)
 
-  let [summarys, setSummary] = useState([])
+  let [summarys, setSummary] = useState(ArrayAny)
 
-  let [gauges, setGauges] = useState([])
+  let [gauges, setGauges] = useState(ArrayAny)
 
   {/* 
     1. Agregue la variable de estado (dataTable) y función de actualización (setDataTable).
   */}
 
-  let [rowsTable, setRowsTable] = useState([])
+  let [rowsTable, setRowsTable] = useState(ArrayAny)
 
   {/*max y min de velocidad*/}
-  let [rowsSpeed, setRowsSpeed] = useState([])
+  let [rowsSpeed, setRowsSpeed] = useState({ "max": "", "maxtime": "", "min": "", "mintime": ""})
 
   {/*max y min de temperatura*/}
-  let [rowsHeat, setRowsHeat] = useState([])
+  let [rowsHeat, setRowsHeat] = useState({ "max": "", "maxtime": "", "min": "", "mintime": ""})
 
   {/* Hook: useEffect */}
 	
@@ -87,7 +88,7 @@ function App() {
 		{/* XML Parser */}
 
 		const parser = new DOMParser();
-		const xml = parser.parseFromString(savedTextXML, "application/xml");
+		const xml = parser.parseFromString(""+savedTextXML, "application/xml");
 
 		{/* Arreglo para agregar los resultados */}
 
@@ -144,7 +145,7 @@ function App() {
 		)
 
 		let humedad = xml.getElementsByTagName("humidity")[0]
-		let gaugeElements = <Gauge title={"humedad"} value={parseInt(""+humedad.getAttribute("value"))}/>
+		let gaugeElements = Array.from(dataToSummary).map(() => <Gauge title={"humedad"} value={parseInt(""+humedad.getAttribute("value"))}/>)
 		   
 		{/* Modificación de la variable de estado mediante la función de actualización */}
 

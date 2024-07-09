@@ -44,7 +44,9 @@ export const options = {
 };
 
 export default function TemperatureChart(data:Config) {
-  let [rows, setRows] = useState([])
+  let ArrayAny : any[] = [];
+  
+  let [rows, setRows] = useState(ArrayAny)
 
   useEffect( () => {
 

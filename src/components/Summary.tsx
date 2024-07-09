@@ -30,9 +30,9 @@ export default function Summary(config: Config) {
     let estados = items.map((item) => <Typography gutterBottom component="h2" variant="h6" color="primary">{item["estado"]}</Typography>)
     let tiempos = items.map((item) => <Typography component="p" variant="h5">{item["tiempo"]}</Typography>)
     let [index, setIndex] = useState([0])
-    let [imagen, setImagen] = useState([imagenes[0]])
-    let [texto1, setTexto1] = useState([estados[0]])
-    let [texto2, setTexto2] = useState([tiempos[0]])
+    let [imagen, setImagen] = useState(imagenes[0])
+    let [texto1, setTexto1] = useState(estados[0])
+    let [texto2, setTexto2] = useState(tiempos[0])
 
     const ChangeImage = () => {
 
