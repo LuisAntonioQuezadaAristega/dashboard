@@ -1,5 +1,4 @@
-import { colors, Grid } from "@mui/material";
-import { alignProperty } from "@mui/material/styles/cssUtils";
+import { Grid } from "@mui/material";
 import { Chart } from "react-google-charts";
 
 interface Config {
@@ -18,7 +17,7 @@ export var options = {
 };
 
 export default function PrecipitationChart(config: Config) {
-  let no = 100 - config.si
+  let no = 100 - parseInt(""+config.si)
   //options.title = "¿llovera a las" + config.title + "?"
   let data = [
     ["Task", "Hours per Day"],

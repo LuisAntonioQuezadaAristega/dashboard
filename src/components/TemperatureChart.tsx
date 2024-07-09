@@ -1,7 +1,6 @@
 //import React from "react";
 import { Chart } from "react-google-charts";
 import { useState, useEffect } from 'react';
-import { colors } from "@mui/material";
 
 interface Config {
   rows: Array<object>;
