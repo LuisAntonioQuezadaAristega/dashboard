@@ -13,6 +13,8 @@ interface Config {
 	maxtime: String;
 	min: String;
 	mintime: String;
+	color: String;
+	fondo: String;
 }
 
 export default function ControlPanel(config: Config) {
@@ -60,10 +62,11 @@ export default function ControlPanel(config: Config) {
 			sx={{
 					p: 2,
 					display: 'flex',
-					flexDirection: 'column'
+					flexDirection: 'column',
+					backgroundColor: config.fondo,
 				}}>
 
-				<Typography gutterBottom component="h2" variant="h6" color="primary">
+				<Typography gutterBottom component="h2" variant="h6" color={""+config.color}>
 					{config.title}
 				</Typography>
 				

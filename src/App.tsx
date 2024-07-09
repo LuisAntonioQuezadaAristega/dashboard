@@ -10,7 +10,6 @@ import TemperatureChart from './components/TemperatureChart';
 //import viteLogo from '/vite.svg'
 import './App.css'
 import PrecipitationChart from './components/PrecipitationChart';
-import InteractiveSection from './components/InteractiveSection';
 import Gauge from './components/gauge';
 
 //<Grid xs={12} sm={4} md={3} lg={2}>1</Grid>
@@ -29,6 +28,10 @@ function App() {
   let [indicators, setIndicators] = useState([])
 
   let [raindata, setRainData] = useState([])
+
+  let [summarys, setSummary] = useState([])
+
+  let [gauges, setGauges] = useState([])
 
   {/* 
     1. Agregue la variable de estado (dataTable) y función de actualización (setDataTable).
@@ -65,7 +68,7 @@ function App() {
 
 			{/* Request */}
 
-			let API_KEY = ""//1835b23e7d0c0a071ef3586f8db8f8c5"
+			let API_KEY = "1835b23e7d0c0a071ef3586f8db8f8c5"
 			let response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=Guayaquil&mode=xml&appid=${API_KEY}`)
 			let savedTextXML = await response.text();
 
@@ -90,7 +93,7 @@ function App() {
 
 		let dataToIndicators = new Array()
 
-		//let dataToSummary = new Array()
+		let dataToSummary = new Array()
 
 		let dataRain = new Array()
 
@@ -119,6 +122,11 @@ function App() {
 		let raintime = (""+tiempo.getAttribute("from")).split("T")[1] + " - " + (""+tiempo.getAttribute("to")).split("T")[1]
 		dataRain.push([rain, raintime])
 
+		let sun = xml.getElementsByTagName("sun")[0]
+		let sunrise = sun.getAttribute("rise")
+		let sunset = sun.getAttribute("set")
+		dataToSummary.push([(""+sunrise).split("T")[0], (""+sunrise).split("T")[1], (""+sunset).split("T")[0], (""+sunset).split("T")[1]])
+
 		//console.log(rain)
 
 		{/* Renderice el arreglo de resultados en un arreglo de elementos Indicator */}
@@ -130,11 +138,21 @@ function App() {
 		let rainElements = Array.from(dataRain).map(
 			(element) => <PrecipitationChart si={element[0]} title={element[1]}/>
 		)
+
+		let summaryElements = Array.from(dataToSummary).map(
+			(element) => <Summary riseday={element[0]} riseTime={element[1]} setday={element[2]} setTime={element[3]}/>
+		)
+
+		let humedad = xml.getElementsByTagName("humidity")[0]
+		let gaugeElements = <Gauge title={"humedad"} value={parseInt(""+humedad.getAttribute("value"))}/>
 		   
 		{/* Modificación de la variable de estado mediante la función de actualización */}
 
 		setIndicators(indicatorsElements)
 		setRainData(rainElements)
+		setSummary(summaryElements)
+		setGauges(gaugeElements)
+
 
 		{/* 
              2. Procese los resultados de acuerdo con el diseño anterior.
@@ -209,22 +227,22 @@ function App() {
   return (
 	
 	<Grid>
-		<Grid container spacing={5}>
-			<Grid>
+		<Grid container spacing={5} id="seccion1">
+			<Grid alignContent={"center"}>
 				{indicators[0]}
 				<br></br>
 				{indicators[1]}
 			</Grid>
+			<Grid alignContent={"center"}>
+				{summarys}
+			</Grid>
 			<Grid>
+				{gauges}
+			</Grid>
+			<Grid alignContent={"center"}>
 				{indicators[2]}
 				<br></br>
 				{indicators[3]}
-			</Grid>
-			<Grid>
-				<Summary></Summary>
-			</Grid>
-			<Grid>
-				<Gauge title={"humedad %"} value={50}></Gauge>
 			</Grid>
 		</Grid>
 
@@ -239,17 +257,17 @@ function App() {
 		<br></br>
 		<br></br>
 		<br></br>
-		<Grid container spacing={5} id="seccion1">
-			<Grid>
-				<ControlPanel title={'Velocidad del viento'} max={rowsSpeed["max"]} maxtime={rowsSpeed["maxtime"]} min={rowsSpeed["min"]} mintime={rowsSpeed["mintime"]}/>
+		<Grid container spacing={5} id="seccion2">
+			<Grid alignContent={"center"}>
+				<ControlPanel title={'Velocidad del viento'} max={rowsSpeed["max"]} maxtime={rowsSpeed["maxtime"]} min={rowsSpeed["min"]} mintime={rowsSpeed["mintime"]} color={"#2871DB"} fondo={"white"}/>
 	    	</Grid>
-			<Grid xs={12} lg={8}>
+			<Grid alignContent={"center"}>
             {/* 4. Envíe la variable de estado (dataTable) como prop (input) del componente (BasicTable) */}
-				<h2>Tabla 1</h2>
+				<h2>Tabla de viento 1</h2>
             	<BasicTable rows={rowsTable.slice(0,4)}></BasicTable>
         	</Grid>
-			<Grid xs={12} lg={8}>
-				<h2>Tabla 2</h2>
+			<Grid alignContent={"center"}>
+				<h2>Tabla de viento 2</h2>
 				<BasicTable rows={rowsTable.slice(4,8)}></BasicTable>
         	</Grid>
 			{/*<Grid xs={12} md={6} lg={9} >
@@ -259,12 +277,13 @@ function App() {
 		<br></br>
 		<br></br>
 		<br></br>
-		<Grid container spacing={5} id="seccion2">
-			<Grid >
-				<ControlPanel title={'Temperatura (Celcius)'} max={rowsHeat["max"]} maxtime={rowsHeat["maxtime"]} min={rowsHeat["min"]} mintime={rowsHeat["mintime"]}/>
+		<Grid container spacing={5} id="seccion3">
+			<Grid alignContent={"center"}>
+				<ControlPanel title={'Temperatura (Celcius)'} max={rowsHeat["max"]} maxtime={rowsHeat["maxtime"]} min={rowsHeat["min"]} mintime={rowsHeat["mintime"]} color={"#c0752e"} fondo={"#F2E6D8"}/>
 	    	</Grid>
 
-			<Grid xs={12} lg={10}>
+			<Grid alignContent={"center"}>
+				<h2>Temperatura (Celcius) vs Tiempo (Horas)</h2>
 				<TemperatureChart rows={rowsTable}></TemperatureChart>
 			</Grid>
 

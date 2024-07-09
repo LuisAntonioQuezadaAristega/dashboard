@@ -12,10 +12,11 @@ export default function Indicator(config: Config) {
             sx={{
               p: 2,
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
+              minWidth:"200px"
             }}
             >
-            <Typography component="h2" variant="h6" color="primary" gutterBottom>
+            <Typography component="h2" variant="h6" color="#2871DB" gutterBottom>
                 {config.title} 
             </Typography>
             <Typography component="p" variant="h6">

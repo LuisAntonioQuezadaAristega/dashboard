@@ -8,13 +8,20 @@ import {useState} from 'react';
 import sunrise from '../assets/dia.jpg'
 import sunset from '../assets/noche.jpg'
 
-export default function Summary() {
+interface Config {
+    riseday: String;
+    setday: String;
+    riseTime: String;
+    setTime: String;
+}
+
+export default function Summary(config: Config) {
 
     
 
     let items = [
-		{"imagen": sunrise, "estado": "Amanecer 2024-07-06", "tiempo": "05:19:08"}, 
-		{"imagen": sunset, "estado": "Atardecer 2024-07-06", "tiempo": "23:19:08"}
+		{"imagen": sunrise, "estado": "Amanecer " + config.riseday, "tiempo": config.riseTime}, 
+		{"imagen": sunset, "estado": "Atardecer " + config.setday, "tiempo": config.setTime}
 	]
 
     
@@ -47,10 +54,10 @@ export default function Summary() {
 
     
     return (
-        <Card sx={{ maxWidth: 345}}>
+        <Card sx={{ maxWidth: 500}}>
             <CardActionArea onClick={ChangeImage}>
                 {imagen}
-                <CardContent sx={{ minWidth: 225}}>
+                <CardContent sx={{ minWidth: 450}}>
                     {texto1}
                     {texto2}
                 </CardContent>

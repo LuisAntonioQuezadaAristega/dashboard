@@ -79,7 +79,7 @@ export default function BasicTable(data:Config){
 
 return (
   <TableContainer component={Paper}>
-    <Table sx={{ minWidth: 425 }} aria-label="simple table">
+    <Table sx={{ minWidth: 475, color: "#323f41" }} aria-label="simple table">
       <TableHead>
         <TableRow>
           <TableCell align="center">Tiempo</TableCell>

@@ -1,6 +1,7 @@
 //import React from "react";
 import { Chart } from "react-google-charts";
 import { useState, useEffect } from 'react';
+import { colors } from "@mui/material";
 
 interface Config {
   rows: Array<object>;
@@ -24,17 +25,22 @@ export var info = [
 ];
 
 export const options = {
-  title: "Temperatura (Celcius) por hora",
+  //title: "Temperatura (Celcius) por hora",
   curveType: "function",
   lineWidth: 4,
   intervals: { style: "line"},
-  colors: ['#e0440e'],
+  colors: ['#c0752e'],
+  backgroundColor: '#F2E6D8',
   legend: "none",
   hAxis: {
-    title: "Tiempo",
+    title: "Horas",
+    titleTextStyle:{color: '#423d38'},
+    textStyle:{color: '#423d38'},
   },
   vAxis: {
     title: "Grados",
+    titleTextStyle:{color: '#423d38'},
+    textStyle:{color: '#423d38'},
   }
 };
 
@@ -61,8 +67,8 @@ export default function TemperatureChart(data:Config) {
   return (
     <Chart
       chartType="LineChart"
-      width="115%"
-      height="350px"
+      width="675px"
+      height="300px"
       data={info}
       options={options}
     />

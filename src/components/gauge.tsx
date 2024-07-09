@@ -7,7 +7,7 @@ interface Config {
 }
 
 export const options = {
-  width: 400,
+  Width: 500,
   height: 200,
   redFrom: 90,
   redTo: 100,
