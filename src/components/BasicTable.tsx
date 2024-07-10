@@ -27,6 +27,7 @@ const rows = [
 */
 interface Config {
   rows: Array<object>;
+  index: Number;
 }
 /*
 export default function BasicTable() {
@@ -67,6 +68,8 @@ export default function BasicTable() {
 export default function BasicTable(data:Config){
   let ArrayAny : any[] = [];
   let [rows, setRows] = useState(ArrayAny)
+  //let [index, setIndex] = useState(Number)
+
   useEffect( () => {
 
     (()=> {
@@ -98,7 +101,7 @@ return (
               {row.hoursTo}
             </TableCell>
             <TableCell align="center">
-              {row.windSpeed}
+              {row.wind[parseInt(""+data.index)]}
             </TableCell>
             <TableCell align="center">
               {row.windDirection}
