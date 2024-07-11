@@ -183,7 +183,7 @@ function App() {
 		<br></br>
 		<br></br>
 		<br></br>
-		{/*<Seccion rows={rowsTable}></Seccion>*/}
+		<Seccion rows={rowsTable}></Seccion>
 		<br></br>
 		<br></br>
 		<br></br>
