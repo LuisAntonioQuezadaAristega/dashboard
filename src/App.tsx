@@ -160,45 +160,7 @@ function App() {
   return (
 	
 	<Grid>
-		<Grid container spacing={5} id="seccion1">
-			<Grid alignContent={"center"}>
-				{indicators[0]}
-				<br></br>
-				{indicators[1]}
-			</Grid>
-			<Grid alignContent={"center"}>
-				{summarys}
-			</Grid>
-			<Grid>
-				{gauges}
-			</Grid>
-			<Grid alignContent={"center"}>
-				{indicators[2]}
-				<br></br>
-				{indicators[3]}
-			</Grid>
-		</Grid>
-
 		
-		<br></br>
-		<br></br>
-		<br></br>
-		<Seccion rows={rowsTable}></Seccion>
-		<br></br>
-		<br></br>
-		<br></br>
-		<Grid container spacing={5} id="seccion3">
-			<Grid alignContent={"center"}>
-				<ControlPanel title={'Temperatura (Celcius)'} max={rowsHeat["max"]} maxtime={rowsHeat["maxtime"]} min={rowsHeat["min"]} mintime={rowsHeat["mintime"]} color={"#c0752e"} fondo={"#F2E6D8"}/>
-	    	</Grid>
-
-			<Grid alignContent={"center"}>
-				<h2>Temperatura (Celcius) vs Tiempo (Horas)</h2>
-				<TemperatureChart rows={rowsTable}></TemperatureChart>
-			</Grid>
-
-			{raindata[0]}
-		</Grid>
 	</Grid>
 
 		
