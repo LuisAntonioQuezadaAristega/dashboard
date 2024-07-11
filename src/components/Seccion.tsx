@@ -73,7 +73,7 @@ export default function Seccion(data:Config) {
     return (
         <Grid container spacing={5} id="seccion2">
 			<Grid alignContent={"center"}>
-		    <Paper
+		    	<Paper
 			    sx={{
 					p: 2,
 					display: 'flex',
@@ -102,14 +102,12 @@ export default function Seccion(data:Config) {
    
 						</Select>
 					</FormControl>
-
-					{/* Muestra la descripción de la variable seleccionada */}
 					<Typography ref={info1} mt={2} component="p" color="text.secondary" />
 					<Typography ref={info2} mt={2} component="p" color="text.secondary" />
 
 				</Box>
 				
-		    </Paper>
+		    	</Paper>
 			</Grid>
             <Grid alignContent={"center"}>
 				<h2>{titulo1}</h2>
